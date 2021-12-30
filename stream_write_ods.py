@@ -12,12 +12,12 @@ def stream_write_ods(sheets):
         perms = 0o600
         to_cell = {
             type(False): lambda v: f'<table:table-cell office:value-type="boolean" office:boolean-value={quoteattr(str(v).lower())}><text:p>{escape(str(v).lower())}</text:p></table:table-cell>',
-            type(date(1970, 1, 1)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
-            type(datetime(1970, 1, 1, 0, 0)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
-            type(0): lambda v: f'<table:table-cell office:value-type="float" office:value="{quoteattr(str(v))}"><text:p>{str(escape(v))}</text:p></table:table-cell>',
-            type(0.0): lambda v: f'<table:table-cell office:value-type="float" office:value="{quoteattr(str(v))}"><text:p>{str(escape(v))}</text:p></table:table-cell>',
+            type(date(1970, 1, 1)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(v.isoformat())}><text:p>{escape(quoteattr(v.isoformat()))}</text:p></table:table-cell>',
+            type(datetime(1970, 1, 1, 0, 0)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(v.isoformat())}><text:p>{escape(quoteattr(v.isoformat()))}</text:p></table:table-cell>',
+            type(0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
+            type(0.0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
             type(''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(v)}</text:p></table:table-cell>',
-            type(None): lambda v: f'<table:table-cell office:value-type="void"><text:p>#NA</text:p></table:table-cell>',
+            type(None): lambda v: f'<table:table-cell office:value-type="string"><text:p>#N/A</text:p></table:table-cell>',
         }
 
         # To validate, mimetype must be first

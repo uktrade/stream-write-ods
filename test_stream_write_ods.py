@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from collections import OrderedDict
 from tempfile import NamedTemporaryFile
 from pandas_ods_reader import read_ods
@@ -13,6 +14,12 @@ def get_sheets():
 
     def get_sheet_2_rows():
         yield 'Row 1 Column 1',
+        yield datetime(2021,1,1,10,1,4),
+        yield date(2021,1,1),
+        yield 2,
+        yield 3.4,
+        yield True,
+        yield None,
 
     yield 'Sheet 2', ('Column 1',), get_sheet_2_rows()
 
@@ -34,7 +41,13 @@ def test_openable_with_pandas():
     ]
     assert sheet_1_cols == ['Column 1 <&>', 'Column 2 <&>']
     assert sheet_2_rows == [
-        ['Row 1 Column 1',]
+        ['Row 1 Column 1',],
+        ['2021-01-01T10:01:04',],
+        ['2021-01-01',],
+        [2.0,],
+        [3.4,],
+        [True,],
+        ['#N/A',],
     ]
     assert sheet_2_cols == ['Column 1',]
 
