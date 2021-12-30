@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from io import BytesIO
 from tempfile import NamedTemporaryFile
 from pandas_ods_reader import read_ods
 from stream_write_ods import stream_write_ods
