@@ -20,7 +20,7 @@ def get_sheets():
         yield 'Value A', 'Value B'
         yield 'Value C', 'Value D'
 
-    yield 'Sheet 1 name', ('col_1_name', 'col_2_name') get_rows_of_sheet_1()
+    yield 'Sheet 1 name', ('col_1_name', 'col_2_name'), get_rows_of_sheet_1()
 
     def get_rows_of_sheet_2():
         yield 'col_1_value',
