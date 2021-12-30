@@ -26,12 +26,10 @@ def stream_write_ods():
                                 '<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>' \
                             '</table:table-row>' \
                         '</table:table-header-rows>' \
-                        '<table:table-rows>' \
-                            '<table:table-row>' \
-                                '<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>' \
-                                '<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>' \
-                            '</table:table-row>' \
-                        '</table:table-rows>' \
+                        '<table:table-row>' \
+                            '<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>' \
+                            '<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>' \
+                        '</table:table-row>' \
                     '</table:table>' \
                 '</office:spreadsheet>' \
             '</office:body>' \
