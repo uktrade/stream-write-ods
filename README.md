@@ -14,6 +14,8 @@ pip install stream-write-ods
 
 ## Usage
 
+In general, pass a nested iterable to `stream_write_ods` and it will return an interable of bytes of the ODS file, as follows.
+
 ```python
 def get_sheets():
     def get_rows_of_sheet_1():
