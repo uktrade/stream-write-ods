@@ -16,7 +16,7 @@ def stream_write_ods():
         '</manifest:manifest>'
     content = \
         '<?xml version="1.0" encoding="UTF-8"?>' \
-        '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">' \
+        '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">' \
             '<office:body>' \
                 '<office:spreadsheet>' \
                     '<table:table table:name="Sheet 1">' \
