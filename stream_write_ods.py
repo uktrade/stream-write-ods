@@ -1,5 +1,5 @@
 from codecs import iterencode
-from datetime import datetime
+from datetime import datetime, date
 from xml.sax.saxutils import escape, quoteattr
 
 from stream_zip import ZIP, NO_COMPRESSION, stream_zip
@@ -10,6 +10,15 @@ def stream_write_ods(sheets):
     def files():
         modified_at = datetime.now()
         perms = 0o600
+        to_cell = {
+            type(False): lambda v: f'<table:table-cell office:value-type="boolean" office:boolean-value={quoteattr(str(v).lower())}><text:p>{escape(str(v).lower())}</text:p></table:table-cell>',
+            type(date(1970, 1, 1)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
+            type(datetime(1970, 1, 1, 0, 0)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
+            type(0): lambda v: f'<table:table-cell office:value-type="float" office:value="{quoteattr(str(v))}"><text:p>{str(escape(v))}</text:p></table:table-cell>',
+            type(0.0): lambda v: f'<table:table-cell office:value-type="float" office:value="{quoteattr(str(v))}"><text:p>{str(escape(v))}</text:p></table:table-cell>',
+            type(''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(v)}</text:p></table:table-cell>',
+            type(None): lambda v: f'<table:table-cell office:value-type="void"><text:p>#NA</text:p></table:table-cell>',
+        }
 
         # To validate, mimetype must be first
         yield 'mimetype', modified_at, perms, NO_COMPRESSION, (
@@ -41,7 +50,7 @@ def stream_write_ods(sheets):
                 for row in rows:
                     yield '<table:table-row>'
                     for value in row:
-                        yield f'<table:table-cell office:value-type="string"><text:p>{escape(value)}</text:p></table:table-cell>'
+                        yield to_cell[type(value)](value)
                     yield '</table:table-row>'
                 yield '</table:table>'
             yield '</office:spreadsheet>'
