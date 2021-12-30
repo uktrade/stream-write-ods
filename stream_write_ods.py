@@ -36,8 +36,9 @@ def stream_write_ods():
         '</office:document-content>'
 
     def files():
-        yield 'META-INF/manifest.xml', modified_at, perms, (manifest.encode(),)
+        # To validate, mimetype must be first
         yield 'mimetype', modified_at, perms, (mimetype.encode(),)
+        yield 'META-INF/manifest.xml', modified_at, perms, (manifest.encode(),)
         yield 'content.xml', modified_at, perms, (content.encode(),)
 
     yield from stream_zip(files())
