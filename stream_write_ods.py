@@ -12,6 +12,7 @@ def stream_write_ods():
         yield 'mimetype', modified_at, perms, NO_COMPRESSION, (
             b'application/vnd.oasis.opendocument.spreadsheet',
         )
+
         yield 'META-INF/manifest.xml', modified_at, perms, ZIP, (
             b'<?xml version="1.0" encoding="UTF-8"?>' \
             b'<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">' \
