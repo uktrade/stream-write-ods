@@ -5,7 +5,7 @@ from xml.sax.saxutils import escape, quoteattr
 from stream_zip import ZIP, NO_COMPRESSION, stream_zip
 
 
-def stream_write_ods(sheets):
+def stream_write_ods(sheets, chunk_size=65536):
 
     def files():
         modified_at = datetime.now()
@@ -59,4 +59,4 @@ def stream_write_ods(sheets):
 
         yield 'content.xml', modified_at, perms, ZIP, iterencode(content_xml(), 'utf-8')
 
-    yield from stream_zip(files())
+    yield from stream_zip(files(), chunk_size=chunk_size)
