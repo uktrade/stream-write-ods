@@ -38,8 +38,8 @@ There are [8 possible data types in an Open Document Spreadsheet](https://docs.o
 | Python type | ODS type                      |
 |:------------|:------------------------------|
 | boolean     | boolean                       |
-| date        | date (without time component) |
-| datetime    | date (with time component)    |
+| date        | date - without time component |
+| datetime    | date - with time component    |
 | int         | float                         |
 | float       | float                         |
 | str         | string                        |
