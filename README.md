@@ -35,12 +35,12 @@ ods_chunks = stream_write_ods(get_sheets())
 
 There are [8 possible data types in an Open Document Spreadsheet](https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#attribute-office_value-type): boolean, currency, date, float, percentage, string, time and void. 5 of these can be output by stream-write-ods, chosen automatically according to the below table
 
-| Python type | ODS type |
-|-------------|----------|
-| boolean     | boolean  |
-| date        | date     |
-| datetime    | date     |
-| int         | float    |
-| float       | float    |
-| str         | string   |
-| NoneType    | void     |
+| Python type | ODS type                      |
+|-------------|-------------------------------|
+| boolean     | boolean                       |
+| date        | date (without time component) |
+| datetime    | date (with time component)    |
+| int         | float                         |
+| float       | float                         |
+| str         | string                        |
+| NoneType    | void                          |
