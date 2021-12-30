@@ -1,5 +1,5 @@
 from datetime import datetime
-from stream_zip import ZIP64, NO_COMPRESSION, stream_zip
+from stream_zip import ZIP, NO_COMPRESSION, stream_zip
 
 
 def stream_write_ods():
@@ -38,7 +38,7 @@ def stream_write_ods():
     def files():
         # To validate, mimetype must be first
         yield 'mimetype', modified_at, perms, NO_COMPRESSION, (mimetype.encode(),)
-        yield 'META-INF/manifest.xml', modified_at, perms, ZIP64, (manifest.encode(),)
-        yield 'content.xml', modified_at, perms, ZIP64, (content.encode(),)
+        yield 'META-INF/manifest.xml', modified_at, perms, ZIP, (manifest.encode(),)
+        yield 'content.xml', modified_at, perms, ZIP, (content.encode(),)
 
     yield from stream_zip(files())
