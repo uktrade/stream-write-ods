@@ -2,4 +2,4 @@
 coverage
 pytest
 pytest-cov
-pyexcel-odsr
+pandas-ods-reader
