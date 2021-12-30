@@ -20,6 +20,7 @@ def stream_write_ods():
             '<office:body>' \
                 '<office:spreadsheet>' \
                     '<table:table table:name="Sheet 1">' \
+                        '<table:table-column table:number-columns-repeated="2"/>' \
                         '<table:table-row>' \
                             '<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>' \
                             '<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>' \
