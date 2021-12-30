@@ -42,3 +42,8 @@ There are [8 possible data types in an Open Document Spreadsheet](https://docs.o
 | float       | float                         |
 | str         | string                        |
 | NoneType    | string - as #NA               |
+
+
+## Limitations
+
+ODS spreadsheets are essentially ZIP files containing several member files. While in general ZIP files can be up to 16EiB (exbibyte) in size using [ZIP64](https://en.wikipedia.org/wiki/ZIP_(file_format)#ZIP64), [LibreOffice does not support ZIP64](https://bugs.documentfoundation.org/show_bug.cgi?id=128244), and so ODS files are de-facto limited to 4GiB (gibibyte). These limits apply to the size of the entire compressed archive, the compressed size of each member file, and uncompressed size of each member file.
