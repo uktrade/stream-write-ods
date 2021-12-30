@@ -21,6 +21,9 @@ setuptools.setup(
         'Topic :: System :: Archiving :: Compression',
     ],
     python_requires='>=3.7.4',
+    install_requires=[
+        'stream-zip>=0.0.11',
+    ],
     py_modules=[
         'stream_write_ods',
     ],
