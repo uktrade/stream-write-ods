@@ -35,6 +35,28 @@ ods_chunks = stream_write_ods(get_sheets())
 ```
 
 
+## Usage: Convert CSV to ODS
+
+The following recipe converts a CSV to ODS.
+
+```python
+import csv
+from stream_write_ods import stream_write_ods
+
+def get_sheets(sheet_name, csv_reader):
+    yield sheet_name, next(csv_reader), csv_reader
+
+# Hard coded is this example, but can be iterable the yields the strings
+# of a CSV file
+csv_data = (
+    'col_1,col_2\n',
+    '1,"value"\n',
+)
+csv_reader = csv.reader(csv_data, csv.QUOTE_NONNUMERIC)
+ods_chunks = stream_write_ods(get_sheets('Sheet name', csv_reader))
+```
+
+
 ## Types
 
 There are [8 possible data types in an Open Document Spreadsheet](https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#attribute-office_value-type): boolean, currency, date, float, percentage, string, time, and void. 4 of these can be output by stream-write-ods, chosen automatically according to the following table.
