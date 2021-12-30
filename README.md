@@ -25,7 +25,7 @@ def get_sheets():
     def get_rows_of_sheet_2():
         yield 'col_1_value',
 
-    yield 'Sheet 2 name', (('col_1_name')), get_rows_of_sheet_2()
+    yield 'Sheet 2 name', ('col_1_name',), get_rows_of_sheet_2()
 
 ods_chunks = stream_write_ods(get_sheets())
 ```
