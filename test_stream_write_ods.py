@@ -6,10 +6,10 @@ from stream_write_ods import stream_write_ods
 
 def get_sheets():
     def get_sheet_1_rows():
-        yield 'Row 1 Column 1', 'Row 1 Column 2'
-        yield 'Row 2 Column 1', 'Row 2 Column 2'
+        yield 'Row 1 Column 1 <&>', 'Row 1 Column 2 <&>'
+        yield 'Row 2 Column 1 <&>', 'Row 2 Column 2 <&>'
 
-    yield 'Sheet 1', ('Column 1', 'Column 2'), get_sheet_1_rows()
+    yield 'Sheet 1 <&>', ('Column 1 <&>', 'Column 2 <&>'), get_sheet_1_rows()
 
     def get_sheet_2_rows():
         yield 'Row 1 Column 1',
@@ -21,7 +21,7 @@ def test_openable_with_pandas():
     with NamedTemporaryFile() as f:
         f.write(b''.join(stream_write_ods(get_sheets())))
         f.flush()
-        sheet_1 = read_ods(f.name, "Sheet 1")
+        sheet_1 = read_ods(f.name, "Sheet 1 <&>")
         sheet_1_rows = sheet_1.values.tolist()
         sheet_1_cols =  sheet_1.columns.tolist()
         sheet_2 = read_ods(f.name, "Sheet 2")
@@ -29,10 +29,10 @@ def test_openable_with_pandas():
         sheet_2_cols =  sheet_2.columns.tolist()
 
     assert sheet_1_rows == [
-        ['Row 1 Column 1', 'Row 1 Column 2'],
-        ['Row 2 Column 1', 'Row 2 Column 2'],
+        ['Row 1 Column 1 <&>', 'Row 1 Column 2 <&>'],
+        ['Row 2 Column 1 <&>', 'Row 2 Column 2 <&>'],
     ]
-    assert sheet_1_cols == ['Column 1', 'Column 2']
+    assert sheet_1_cols == ['Column 1 <&>', 'Column 2 <&>']
     assert sheet_2_rows == [
         ['Row 1 Column 1',]
     ]
