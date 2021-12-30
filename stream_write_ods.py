@@ -21,27 +21,26 @@ def stream_write_ods():
         )
 
         def content_xml():
-            yield \
-                b'<?xml version="1.0" encoding="UTF-8"?>' \
-                b'<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">' \
-                    b'<office:body>' \
-                        b'<office:spreadsheet>' \
-                            b'<table:table table:name="Sheet 1">' \
-                                b'<table:table-column table:number-columns-repeated="2"/>' \
-                                b'<table:table-header-rows>' \
-                                    b'<table:table-row>' \
-                                        b'<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>' \
-                                        b'<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>' \
-                                    b'</table:table-row>' \
-                                b'</table:table-header-rows>' \
-                                b'<table:table-row>' \
-                                    b'<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>' \
-                                    b'<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>' \
-                                b'</table:table-row>' \
-                            b'</table:table>' \
-                        b'</office:spreadsheet>' \
-                    b'</office:body>' \
-                b'</office:document-content>'
+            yield b'<?xml version="1.0" encoding="UTF-8"?>'
+            yield b'<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">'
+            yield b'<office:body>'
+            yield b'<office:spreadsheet>'
+            yield b'<table:table table:name="Sheet 1">'
+            yield b'<table:table-column table:number-columns-repeated="2"/>'
+            yield b'<table:table-header-rows>'
+            yield b'<table:table-row>'
+            yield b'<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>'
+            yield b'<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>'
+            yield b'</table:table-row>'
+            yield b'</table:table-header-rows>'
+            yield b'<table:table-row>'
+            yield b'<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>'
+            yield b'<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>'
+            yield b'</table:table-row>'
+            yield b'</table:table>'
+            yield b'</office:spreadsheet>'
+            yield b'</office:body>'
+            yield b'</office:document-content>'
 
         yield 'content.xml', modified_at, perms, ZIP, content_xml()
 
