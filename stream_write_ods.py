@@ -16,16 +16,14 @@ def stream_write_ods():
         '</manifest:manifest>'
     content = \
         '<?xml version="1.0" encoding="UTF-8"?>' \
-        '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">' \
+        '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3">' \
             '<office:body>' \
                 '<office:spreadsheet>' \
                     '<table:table table:name="Sheet 1">' \
-                        '<table:table-header-rows>' \
-                            '<table:table-row>' \
-                                '<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>' \
-                                '<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>' \
-                            '</table:table-row>' \
-                        '</table:table-header-rows>' \
+                        '<table:table-row>' \
+                            '<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>' \
+                            '<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>' \
+                        '</table:table-row>' \
                         '<table:table-row>' \
                             '<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>' \
                             '<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>' \
