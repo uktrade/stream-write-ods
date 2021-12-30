@@ -14,12 +14,20 @@ coverage[toml]==6.2
     #   pytest-cov
 iniconfig==1.1.1
     # via pytest
+lml==0.1.0
+    # via pyexcel-io
+lxml==4.7.1
+    # via pyexcel-odsr
 packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
 py==1.11.0
     # via pytest
+pyexcel-io==0.6.5
+    # via pyexcel-odsr
+pyexcel-odsr==0.6.0
+    # via -r requirements-dev.in
 pyparsing==3.0.6
     # via packaging
 pytest==6.2.5
@@ -28,6 +36,8 @@ pytest==6.2.5
     #   pytest-cov
 pytest-cov==3.0.0
     # via -r requirements-dev.in
+stream-zip==0.0.11
+    # via stream-write-ods
 toml==0.10.2
     # via pytest
 tomli==2.0.0
