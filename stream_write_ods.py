@@ -1,3 +1,4 @@
+from codecs import iterencode
 from datetime import datetime
 from stream_zip import ZIP, NO_COMPRESSION, stream_zip
 
@@ -22,27 +23,27 @@ def stream_write_ods():
         )
 
         def content_xml():
-            yield b'<?xml version="1.0" encoding="UTF-8"?>'
-            yield b'<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">'
-            yield b'<office:body>'
-            yield b'<office:spreadsheet>'
-            yield b'<table:table table:name="Sheet 1">'
-            yield b'<table:table-column table:number-columns-repeated="2"/>'
-            yield b'<table:table-header-rows>'
-            yield b'<table:table-row>'
-            yield b'<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>'
-            yield b'<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>'
-            yield b'</table:table-row>'
-            yield b'</table:table-header-rows>'
-            yield b'<table:table-row>'
-            yield b'<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>'
-            yield b'<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>'
-            yield b'</table:table-row>'
-            yield b'</table:table>'
-            yield b'</office:spreadsheet>'
-            yield b'</office:body>'
-            yield b'</office:document-content>'
+            yield '<?xml version="1.0" encoding="UTF-8"?>'
+            yield '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2">'
+            yield '<office:body>'
+            yield '<office:spreadsheet>'
+            yield '<table:table table:name="Sheet 1">'
+            yield '<table:table-column table:number-columns-repeated="2"/>'
+            yield '<table:table-header-rows>'
+            yield '<table:table-row>'
+            yield '<table:table-cell office:value-type="string"><text:p>Col 1</text:p></table:table-cell>'
+            yield '<table:table-cell office:value-type="string"><text:p>Col 2</text:p></table:table-cell>'
+            yield '</table:table-row>'
+            yield '</table:table-header-rows>'
+            yield '<table:table-row>'
+            yield '<table:table-cell office:value-type="string"><text:p>Value 1</text:p></table:table-cell>'
+            yield '<table:table-cell office:value-type="string"><text:p>Value 2</text:p></table:table-cell>'
+            yield '</table:table-row>'
+            yield '</table:table>'
+            yield '</office:spreadsheet>'
+            yield '</office:body>'
+            yield '</office:document-content>'
 
-        yield 'content.xml', modified_at, perms, ZIP, content_xml()
+        yield 'content.xml', modified_at, perms, ZIP, iterencode(content_xml(), 'utf-8')
 
     yield from stream_zip(files())
