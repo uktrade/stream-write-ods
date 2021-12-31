@@ -179,6 +179,7 @@ There are [8 possible data types in an Open Document Spreadsheet](https://docs.o
 | int         | float                         |
 | float       | float                         |
 | str         | string                        |
+| bytes       | string - base64 encoded       |
 | NoneType    | string - as #NA               |
 
 

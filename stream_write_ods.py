@@ -1,3 +1,4 @@
+from base64 import b64encode
 from codecs import iterencode
 from datetime import datetime, date
 from xml.sax.saxutils import escape, quoteattr
@@ -17,6 +18,7 @@ def stream_write_ods(sheets, chunk_size=65536):
             type(0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
             type(0.0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
             type(''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(v)}</text:p></table:table-cell>',
+            type(b''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(b64encode(v).decode())}</text:p></table:table-cell>',
             type(None): lambda v: f'<table:table-cell office:value-type="string"><text:p>#N/A</text:p></table:table-cell>',
         }
 

@@ -19,6 +19,7 @@ def get_sheets():
         yield 2,
         yield 3.4,
         yield True,
+        yield b'Binary data',
         yield None,
 
     yield 'Sheet 2', ('Column 1',), get_sheet_2_rows()
@@ -47,6 +48,7 @@ def test_openable_with_pandas():
         [2.0,],
         [3.4,],
         [True,],
+        ['QmluYXJ5IGRhdGE=',],
         ['#N/A',],
     ]
     assert sheet_2_cols == ['Column 1',]
