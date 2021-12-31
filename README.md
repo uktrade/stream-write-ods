@@ -44,15 +44,16 @@ import codecs
 import csv
 from stream_write_ods import stream_write_ods
 
-def get_sheets(sheet_name, csv_reader):
-    yield sheet_name, next(csv_reader), csv_reader
-
 # Any iterable that yields the bytes of a CSV file
 # Hard coded for the purposes of this example
 csv_data_bytes_iter = (
     b'col_1,col_2\n',
     b'1,"value"\n',
 )
+
+def get_sheets(sheet_name, csv_reader):
+    yield sheet_name, next(csv_reader), csv_reader
+
 csv_data_str_iter = codecs.iterdecode(csv_data_bytes_iter, 'utf-8')
 csv_reader = csv.reader(csv_data_str_iter, csv.QUOTE_NONNUMERIC)
 ods_chunks = stream_write_ods(get_sheets('Sheet name', csv_reader))
