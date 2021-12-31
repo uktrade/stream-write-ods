@@ -59,44 +59,6 @@ ods_chunks = stream_write_ods(get_sheets('Sheet name', csv_reader))
 ```
 
 
-## Usage: Convert SQLite to ODS
-
-```python
-import contextlib
-import sqlite3
-import tempfile
-from stream_write_ods import stream_write_ods
-
-@contextlib.contextmanager
-def get_db():
-    # Hard coded in memory database for the purposes of this example
-    with sqlite3.connect(':memory:') as con:
-        cur = con.cursor()
-        cur.execute("CREATE TABLE my_table_a (my_col text);")
-        cur.execute("CREATE TABLE my_table_b (my_col text);")
-        cur.execute("INSERT INTO my_table_a VALUES ('Value A')")
-        cur.execute("INSERT INTO my_table_b VALUES ('Value B')")
-        yield con
-
-def quote_identifier(value):
-    return '"' + value.replace('"', '""') + '"'
-
-def get_sheets(db):
-    cur_table = db.cursor()
-    cur_table.execute('''
-        SELECT name FROM sqlite_master
-        WHERE type = "table" AND name NOT LIKE 'sqlite\\_%' ESCAPE '\\'
-    ''')
-    cur_data = db.cursor()
-    for table, in cur_table:
-        cur_data.execute(f'SELECT * FROM {quote_identifier(table)} ORDER BY rowid')
-        yield table, tuple(col[0] for col in cur_data.description), cur_data
-
-with get_db() as db:
-    ods_chunks = stream_write_ods(get_sheets(db))
-```
-
-
 ## Usage: Convert JSON to ODS
 
 Using [ijson](https://github.com/ICRAR/ijson) to stream-parse a JSON file, it's possible to convert JSON data to ODS on the fly:
@@ -161,6 +123,44 @@ def get_sheets(json_file):
 
 json_file = to_file_like_obj(json_bytes_iter)
 ods_chunks = stream_write_ods(get_sheets(json_file))
+```
+
+
+## Usage: Convert SQLite to ODS
+
+```python
+import contextlib
+import sqlite3
+import tempfile
+from stream_write_ods import stream_write_ods
+
+@contextlib.contextmanager
+def get_db():
+    # Hard coded in memory database for the purposes of this example
+    with sqlite3.connect(':memory:') as con:
+        cur = con.cursor()
+        cur.execute("CREATE TABLE my_table_a (my_col text);")
+        cur.execute("CREATE TABLE my_table_b (my_col text);")
+        cur.execute("INSERT INTO my_table_a VALUES ('Value A')")
+        cur.execute("INSERT INTO my_table_b VALUES ('Value B')")
+        yield con
+
+def quote_identifier(value):
+    return '"' + value.replace('"', '""') + '"'
+
+def get_sheets(db):
+    cur_table = db.cursor()
+    cur_table.execute('''
+        SELECT name FROM sqlite_master
+        WHERE type = "table" AND name NOT LIKE 'sqlite\\_%' ESCAPE '\\'
+    ''')
+    cur_data = db.cursor()
+    for table, in cur_table:
+        cur_data.execute(f'SELECT * FROM {quote_identifier(table)} ORDER BY rowid')
+        yield table, tuple(col[0] for col in cur_data.description), cur_data
+
+with get_db() as db:
+    ods_chunks = stream_write_ods(get_sheets(db))
 ```
 
 
