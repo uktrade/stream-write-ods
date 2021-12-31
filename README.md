@@ -56,7 +56,7 @@ def get_sheets(sheet_name, csv_reader):
 
 csv_str_iter = codecs.iterdecode(csv_bytes_iter, 'utf-8')
 csv_reader = csv.reader(csv_str_iter, csv.QUOTE_NONNUMERIC)
-ods_chunks = stream_write_ods(get_sheets('Sheet name', csv_reader))
+ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
 
 
