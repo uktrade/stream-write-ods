@@ -128,6 +128,8 @@ ods_chunks = stream_write_ods(get_sheets(json_file))
 
 ## Usage: Convert SQLite to ODS
 
+SQLite isn't particularly streaming-friendly since typically you need random access to the file. But it's still possible to use stream-write-ods to convert SQLite to ODS.
+
 ```python
 import contextlib
 import sqlite3
