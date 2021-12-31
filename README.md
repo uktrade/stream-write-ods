@@ -47,8 +47,8 @@ from stream_write_ods import stream_write_ods
 def get_sheets(sheet_name, csv_reader):
     yield sheet_name, next(csv_reader), csv_reader
 
-# Hard coded is this example, but can be any iterable that yields the
-# bytes of a CSV file
+# Any iterable that yields the bytes of a CSV file
+# Hard coded for the purposes of this example
 csv_data_bytes_iter = (
     b'col_1,col_2\n',
     b'1,"value"\n',
