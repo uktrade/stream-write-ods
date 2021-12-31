@@ -116,7 +116,7 @@ def get_sheets(json_file):
                 columns = list(item.keys())
             yield tuple(item[column] for column in columns)
 
-    # Ensure column populated
+    # Ensure columns populated
     rows_it = rows()
     first_row = next(rows_it)
 
