@@ -95,6 +95,73 @@ with get_db() as db:
 ```
 
 
+## Usage: Convert JSON to ODS
+
+Using [ijson](https://github.com/ICRAR/ijson) to stream-parse a JSON file, it's possible to convert JSON data to ODS on the fly:
+
+```python
+import ijson
+import itertools
+from stream_write_ods import stream_write_ods
+
+# Any iterable that yields the bytes of a JSON file
+# Hard coded for the purposes of this example
+json_bytes_iter = (b'''{
+  "data": [
+      {"id": 1, "name": "Foo"},
+      {"id": 2, "name": "Bar"}
+  ]
+}''',)
+
+# ijson requires a file-like object
+def to_file_like_obj(bytes_iter):
+    chunk = b''
+    offset = 0
+    it = iter(bytes_iter)
+
+    def up_to_iter(num):
+        nonlocal chunk, offset
+
+        while num:
+            if offset == len(chunk):
+                try:
+                    chunk = next(it)
+                except StopIteration:
+                    break
+                else:
+                    offset = 0
+            to_yield = min(num, len(chunk) - offset)
+            offset = offset + to_yield
+            num -= to_yield
+            yield chunk[offset - to_yield:offset]
+
+    class FileLikeObj:
+        def read(self, n):
+            return b''.join(up_to_iter(n))
+
+    return FileLikeObj()
+
+def get_sheets(json_file):
+    columns = None
+
+    def rows():
+        nonlocal columns
+        for item in ijson.items(json_file, 'data.item'):
+            if columns is None:
+                columns = list(item.keys())
+            yield tuple(item[column] for column in columns)
+
+    # Ensure column populated
+    rows_it = rows()
+    first_row = next(rows_it)
+
+    yield 'Sheet 1', columns, itertools.chain((first_row,), rows_it)
+
+json_file = to_file_like_obj(json_bytes_iter)
+ods_chunks = stream_write_ods(get_sheets(json_file))
+```
+
+
 ## Types
 
 There are [8 possible data types in an Open Document Spreadsheet](https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#attribute-office_value-type): boolean, currency, date, float, percentage, string, time, and void. 4 of these can be output by stream-write-ods, chosen automatically according to the following table.
