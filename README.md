@@ -101,8 +101,8 @@ def to_file_like_obj(bytes_iter):
             yield chunk[offset - to_yield:offset]
 
     class FileLikeObj:
-        def read(self, n):
-            return b''.join(up_to_iter(n))
+        def read(self, n=-1):
+            return b''.join(up_to_iter(float('inf') if n == -1 else n))
 
     return FileLikeObj()
 
