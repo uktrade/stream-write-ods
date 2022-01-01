@@ -84,10 +84,10 @@ def to_file_like_obj(bytes_iter):
     offset = 0
     it = iter(bytes_iter)
 
-    def up_to_iter(num):
+    def up_to_iter(size):
         nonlocal chunk, offset
 
-        while num:
+        while size:
             if offset == len(chunk):
                 try:
                     chunk = next(it)
@@ -95,14 +95,14 @@ def to_file_like_obj(bytes_iter):
                     break
                 else:
                     offset = 0
-            to_yield = min(num, len(chunk) - offset)
+            to_yield = min(size, len(chunk) - offset)
             offset = offset + to_yield
-            num -= to_yield
+            size -= to_yield
             yield chunk[offset - to_yield:offset]
 
     class FileLikeObj:
-        def read(self, n=-1):
-            return b''.join(up_to_iter(float('inf') if n == -1 else n))
+        def read(self, size=-1):
+            return b''.join(up_to_iter(float('inf') if size is None or size < 0 else size))
 
     return FileLikeObj()
 
