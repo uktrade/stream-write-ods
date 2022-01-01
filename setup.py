@@ -8,7 +8,7 @@ def long_description():
 
 setuptools.setup(
     name='stream-write-ods',
-    version='0.0.9',
+    version='0.0.10',
     author='Department for International Trade',
     author_email='sre@digital.trade.gov.uk',
     description='Python function to construct an ODS spreadsheet on the fly - without having to store the entire file in memory or disk',
