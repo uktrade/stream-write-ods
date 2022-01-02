@@ -22,7 +22,7 @@ setuptools.setup(
     ],
     python_requires='>=3.7.4',
     install_requires=[
-        'stream-zip>=0.0.15',
+        'stream-zip>=0.0.30',
     ],
     py_modules=[
         'stream_write_ods',

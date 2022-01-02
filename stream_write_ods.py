@@ -3,7 +3,7 @@ from codecs import iterencode
 from datetime import datetime, date
 from xml.sax.saxutils import escape, quoteattr
 
-from stream_zip import ZIP, NO_COMPRESSION, stream_zip
+from stream_zip import ZIP_32, NO_COMPRESSION_32, stream_zip
 
 
 def stream_write_ods(sheets, chunk_size=65536):
@@ -23,11 +23,11 @@ def stream_write_ods(sheets, chunk_size=65536):
         }
 
         # To validate, mimetype must be first
-        yield 'mimetype', modified_at, perms, NO_COMPRESSION, (
+        yield 'mimetype', modified_at, perms, NO_COMPRESSION_32, (
             b'application/vnd.oasis.opendocument.spreadsheet',
         )
 
-        yield 'META-INF/manifest.xml', modified_at, perms, ZIP, (
+        yield 'META-INF/manifest.xml', modified_at, perms, ZIP_32, (
             b'<?xml version="1.0" encoding="UTF-8"?>' \
             b'<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">' \
                 b'<manifest:file-entry manifest:full-path="/" manifest:version="1.2" manifest:media-type="application/vnd.oasis.opendocument.spreadsheet"/>' \
@@ -59,6 +59,6 @@ def stream_write_ods(sheets, chunk_size=65536):
             yield '</office:body>'
             yield '</office:document-content>'
 
-        yield 'content.xml', modified_at, perms, ZIP, iterencode(content_xml(), 'utf-8')
+        yield 'content.xml', modified_at, perms, ZIP_32, iterencode(content_xml(), 'utf-8')
 
     yield from stream_zip(files(), chunk_size=chunk_size)
