@@ -185,6 +185,13 @@ There are [8 possible data types in an Open Document Spreadsheet](https://docs.o
 It is possible to change how each type is encoded by overriding the `encoders` parameter of the `stream_write_ods` function. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
 
 
+## Modified at
+
+ODS files are ZIP files, and as such _require_ a "modified at" time for each member file. This defaults to `datatime.now`, but can be overridden by the `get_modified_at` parameter of the `stream_write_ods` function. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
+
+This is useful if you want to make sure generated ODS files are byte-for-byte identical to a fixed reference, say from automated tests.
+
+
 ## Limitations
 
 ODS spreadsheets are essentially ZIP archives containing several member files. While in general ZIP archives can be up to 16EiB (exbibyte) in size using [ZIP64](https://en.wikipedia.org/wiki/ZIP_(file_format)#ZIP64), [LibreOffice does not support ZIP64](https://bugs.documentfoundation.org/show_bug.cgi?id=128244), and so ODS files are de-facto limited to 4GiB (gibibyte). This limit applies to the size of the entire compressed archive, the compressed size of each member file, and the uncompressed size of each member file.
