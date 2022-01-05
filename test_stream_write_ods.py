@@ -50,7 +50,7 @@ def test_openable_with_pandas():
         [3.4,],
         [True,],
         ['QmluYXJ5IGRhdGE=',],
-        ['#N/A',],
+        ['#NA',],
         ['<![CDATA[',]
     ]
     assert sheet_2_cols == ['Column 1',]

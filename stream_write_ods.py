@@ -14,7 +14,7 @@ def stream_write_ods(sheets, encoders=(
     (type(0.0), ('float', 'value', str)),
     (type(''), ('string', None, str)),
     (type(b''), ('string', None, lambda v: b64encode(v).decode())),
-    (type(None), ('string', None, lambda _: '#N/A')),
+    (type(None), ('string', None, lambda _: '#NA')),
 ), chunk_size=65536):
     encoders = dict(encoders)
 
