@@ -22,7 +22,6 @@ def stream_write_ods(sheets, encoders=(
         modified_at = datetime.now()
         perms = 0o600
 
-        # To validate, mimetype must be first
         yield 'mimetype', modified_at, perms, NO_COMPRESSION_32, (
             b'application/vnd.oasis.opendocument.spreadsheet',
         )
