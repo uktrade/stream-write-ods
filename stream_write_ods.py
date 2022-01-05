@@ -7,11 +7,11 @@ from stream_zip import ZIP_32, NO_COMPRESSION_32, stream_zip
 
 
 def stream_write_ods(sheets, encoders=(
-    (type(False), ('boolean', 'boolean-value', lambda v: str(v).lower())),
-    (type(date(1970, 1, 1)), ('date', 'date-value', lambda v: v.isoformat())),
-    (type(datetime(1970, 1, 1, 0, 0)), ('date', 'date-value', lambda v: v.isoformat())),
-    (type(0), ('float', 'value', str)),
-    (type(0.0), ('float', 'value', str)),
+    (type(False), ('boolean', 'office:boolean-value', lambda v: str(v).lower())),
+    (type(date(1970, 1, 1)), ('date', 'office:date-value', lambda v: v.isoformat())),
+    (type(datetime(1970, 1, 1, 0, 0)), ('date', 'office:date-value', lambda v: v.isoformat())),
+    (type(0), ('float', 'office:value', str)),
+    (type(0.0), ('float', 'office:value', str)),
     (type(''), ('string', None, str)),
     (type(b''), ('string', None, lambda v: b64encode(v).decode())),
     (type(None), ('string', None, lambda _: '#NA')),
@@ -57,7 +57,7 @@ def stream_write_ods(sheets, encoders=(
                         yield f'<table:table-cell'
                         yield f' office:value-type="{value_type}"'
                         if value_attr is not None:
-                            yield f' office:{value_attr}={quoteattr(encoded)}'
+                            yield f' {value_attr}={quoteattr(encoded)}'
                         yield f'><text:p>{escape(encoded)}</text:p>'
                         yield '</table:table-cell>'
                     yield '</table:table-row>'
