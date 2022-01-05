@@ -11,15 +11,15 @@ def stream_write_ods(sheets, chunk_size=65536):
     def files():
         modified_at = datetime.now()
         perms = 0o600
-        to_cell = {
-            type(False): lambda v: f'<table:table-cell office:value-type="boolean" office:boolean-value={quoteattr(str(v).lower())}><text:p>{escape(str(v).lower())}</text:p></table:table-cell>',
-            type(date(1970, 1, 1)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(v.isoformat())}><text:p>{escape(quoteattr(v.isoformat()))}</text:p></table:table-cell>',
-            type(datetime(1970, 1, 1, 0, 0)): lambda v: f'<table:table-cell office:value-type="date" office:date-value={quoteattr(v.isoformat())}><text:p>{escape(quoteattr(v.isoformat()))}</text:p></table:table-cell>',
-            type(0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
-            type(0.0): lambda v: f'<table:table-cell office:value-type="float" office:value={quoteattr(str(v))}><text:p>{escape(str(v))}</text:p></table:table-cell>',
-            type(''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(v)}</text:p></table:table-cell>',
-            type(b''): lambda v: f'<table:table-cell office:value-type="string"><text:p>{escape(b64encode(v).decode())}</text:p></table:table-cell>',
-            type(None): lambda v: f'<table:table-cell office:value-type="string"><text:p>#N/A</text:p></table:table-cell>',
+        encoders = {
+            type(False): ('boolean', 'boolean-value', lambda v: str(v).lower()),
+            type(date(1970, 1, 1)): ('date', 'date-value', lambda v: v.isoformat()),
+            type(datetime(1970, 1, 1, 0, 0)): ('date', 'date-value', lambda v: v.isoformat()),
+            type(0): ('float', 'value', str),
+            type(0.0): ('float', 'value', str),
+            type(''): ('string', None, str),
+            type(b''): ('string', None, lambda v: b64encode(v).decode()),
+            type(None): ('string', None, lambda _: '#N/A'),
         }
 
         # To validate, mimetype must be first
@@ -52,7 +52,14 @@ def stream_write_ods(sheets, chunk_size=65536):
                 for row in rows:
                     yield '<table:table-row>'
                     for value in row:
-                        yield to_cell[type(value)](value)
+                        value_type, value_attr, encoder = encoders[type(value)]
+                        encoded = encoder(value)
+                        yield f'<table:table-cell'
+                        yield f' office:value-type="{value_type}"'
+                        if value_attr is not None:
+                            yield f' office:{value_attr}={quoteattr(encoded)}'
+                        yield f'><text:p>{escape(encoded)}</text:p>'
+                        yield '</table:table-cell>'
                     yield '</table:table-row>'
                 yield '</table:table>'
             yield '</office:spreadsheet>'
