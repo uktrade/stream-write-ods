@@ -60,6 +60,48 @@ ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
 
 
+## Usage: Convert large/chunked pandas dataframe to ODS
+
+```python
+from io import BytesIO
+from itertools import chain
+import pandas as pd
+from stream_write_ods import stream_write_ods
+
+# Hard coded for the purposes of this example,
+# but could be any file-like object
+csv_file = BytesIO((
+    b'col_1,col_2\n' +
+    b'1,"value"\n'
+    b'2,"other value"\n'
+))
+
+def get_sheets():
+    columns = None
+
+    def get_rows():
+        nonlocal columns
+        # Directly reads the hard-coded CSV and saves as ODS for the purposes,
+        # of this example, but could have calculations / manipulations between
+        with pd.read_csv(csv_file, chunksize=1024) as reader:
+            for chunk in reader:
+                if columns is None:
+                    columns = tuple(chunk.columns.tolist())
+                yield from (row for index, row in chunk.iterrows())
+
+    rows = get_rows()
+    first_row = next(rows)
+
+    yield 'Sheet 1', columns, chain((first_row,), rows)
+
+ods_chunks = stream_write_ods(get_sheets())
+
+with open('t.ods', 'wb') as f:
+    for chunk in ods_chunks:
+        f.write(chunk)
+```
+
+
 ## Usage: Convert JSON to ODS
 
 Using [ijson](https://github.com/ICRAR/ijson) to stream-parse a JSON file, it's possible to convert JSON data to ODS on the fly:
