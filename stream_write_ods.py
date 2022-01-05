@@ -15,11 +15,11 @@ def stream_write_ods(sheets, encoders=(
     (type(''), ('string', None, str)),
     (type(b''), ('string', None, lambda v: b64encode(v).decode())),
     (type(None), ('string', None, lambda _: '#NA')),
-), chunk_size=65536):
+), get_modified_at=lambda: datetime.now(), chunk_size=65536):
     encoders = dict(encoders)
 
     def files():
-        modified_at = datetime.now()
+        modified_at = get_modified_at()
         perms = 0o600
 
         yield 'mimetype', modified_at, perms, NO_COMPRESSION_32, (
