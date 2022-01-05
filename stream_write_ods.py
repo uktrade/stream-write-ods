@@ -6,21 +6,21 @@ from xml.sax.saxutils import escape, quoteattr
 from stream_zip import ZIP_32, NO_COMPRESSION_32, stream_zip
 
 
-def stream_write_ods(sheets, chunk_size=65536):
+def stream_write_ods(sheets, encoders=(
+    (type(False), ('boolean', 'boolean-value', lambda v: str(v).lower())),
+    (type(date(1970, 1, 1)), ('date', 'date-value', lambda v: v.isoformat())),
+    (type(datetime(1970, 1, 1, 0, 0)), ('date', 'date-value', lambda v: v.isoformat())),
+    (type(0), ('float', 'value', str)),
+    (type(0.0), ('float', 'value', str)),
+    (type(''), ('string', None, str)),
+    (type(b''), ('string', None, lambda v: b64encode(v).decode())),
+    (type(None), ('string', None, lambda _: '#N/A')),
+), chunk_size=65536):
+    encoders = dict(encoders)
 
     def files():
         modified_at = datetime.now()
         perms = 0o600
-        encoders = {
-            type(False): ('boolean', 'boolean-value', lambda v: str(v).lower()),
-            type(date(1970, 1, 1)): ('date', 'date-value', lambda v: v.isoformat()),
-            type(datetime(1970, 1, 1, 0, 0)): ('date', 'date-value', lambda v: v.isoformat()),
-            type(0): ('float', 'value', str),
-            type(0.0): ('float', 'value', str),
-            type(''): ('string', None, str),
-            type(b''): ('string', None, lambda v: b64encode(v).decode()),
-            type(None): ('string', None, lambda _: '#N/A'),
-        }
 
         # To validate, mimetype must be first
         yield 'mimetype', modified_at, perms, NO_COMPRESSION_32, (
