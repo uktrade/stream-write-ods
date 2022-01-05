@@ -17,11 +17,10 @@ def stream_write_ods(sheets, encoders=(
     (type(None), ('string', None, lambda _: '#NA')),
 ), get_modified_at=lambda: datetime.now(), chunk_size=65536):
     encoders = dict(encoders)
+    modified_at = get_modified_at()
+    perms = 0o600
 
     def files():
-        modified_at = get_modified_at()
-        perms = 0o600
-
         yield 'mimetype', modified_at, perms, NO_COMPRESSION_32, (
             b'application/vnd.oasis.opendocument.spreadsheet',
         )
