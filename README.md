@@ -182,7 +182,7 @@ There are [8 possible data types in an Open Document Spreadsheet](https://docs.o
 | bytes       | string - base64 encoded       |
 | NoneType    | string - as #NA               |
 
-It is possible to change how each type is encoded by overriding the `encoders` parameter of `stream_write_ods`. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
+It is possible to change how each type is encoded by overriding the `encoders` parameter of the `stream_write_ods` function. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
 
 
 ## Limitations
