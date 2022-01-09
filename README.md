@@ -140,8 +140,8 @@ def get_sheets(reader):
 
     yield 'Sheet 1', columns, chain((first_row,), rows)
 
-# Directly reads the hard-coded CSV and saves as ODS for the purposes
-# of this example, but could have calculations / manipulations between
+# Directly saves the chunked dataframe as ODS for the purposes
+# of this example, but could include calculations / manipulations
 with pd.read_csv(csv_file, chunksize=1024) as reader:
     ods_chunks = stream_write_ods(get_sheets(reader))
 ```
