@@ -29,8 +29,14 @@ def stream_write_ods(sheets, encoders=(
             b'<?xml version="1.0" encoding="UTF-8"?>' \
             b'<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">' \
                 b'<manifest:file-entry manifest:full-path="/" manifest:version="1.2" manifest:media-type="application/vnd.oasis.opendocument.spreadsheet"/>' \
+                b'<manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>' \
                 b'<manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>' \
             b'</manifest:manifest>',
+        )
+
+        # Not needed to validate, but Excel appears to need this file
+        yield 'styles.xml', modified_at, perms, ZIP_32, (
+            b'<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.2"></office:document-styles>',
         )
 
         def content_xml():
