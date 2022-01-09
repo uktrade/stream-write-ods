@@ -35,9 +35,27 @@ ods_chunks = stream_write_ods(get_sheets())
 ```
 
 
-## Usage: Convert CSV to ODS
+## Usage: Convert CSV file to ODS
 
-The following recipe converts a CSV to ODS.
+The following recipe converats a local CSV file to ODS
+
+```python
+import csv
+from stream_write_ods import stream_write_ods
+
+def get_sheets(sheet_name, csv_reader):
+    yield sheet_name, next(csv_reader), csv_reader
+
+with open('my.csv', 'r', encoding='utf-8', newline='') as f:
+    csv_reader = csv.reader(f, csv.QUOTE_NONNUMERIC)
+    ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
+```
+
+
+
+## Usage: Convert CSV bytes to ODS
+
+The following recipe converts an iterable yielding the bytes of a CSV to ODS.
 
 ```python
 import csv
