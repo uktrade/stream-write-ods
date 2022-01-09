@@ -51,7 +51,7 @@ bytes_iter = (
     b'1,"value"\n',
 )
 
-def to_str_lines(iterable, newline=None):
+def to_str_lines(iterable):
     # Based on the answer at https://stackoverflow.com/a/70639580/1319998
     chunk = b''
     offset = 0
@@ -79,12 +79,12 @@ def to_str_lines(iterable, newline=None):
         def read(self, size=-1):
             return b''.join(up_to_iter(float('inf') if size is None or size < 0 else size))
 
-    yield from TextIOWrapper(FileLikeObj(), encoding='utf-8', newline=newline)
+    yield from TextIOWrapper(FileLikeObj(), encoding='utf-8', newline='')
 
 def get_sheets(sheet_name, csv_reader):
     yield sheet_name, next(csv_reader), csv_reader
 
-lines_iter = to_str_lines(bytes_iter, newline='')
+lines_iter = to_str_lines(bytes_iter)
 csv_reader = csv.reader(lines_iter, csv.QUOTE_NONNUMERIC)
 ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
