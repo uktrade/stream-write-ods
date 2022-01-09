@@ -40,22 +40,52 @@ ods_chunks = stream_write_ods(get_sheets())
 The following recipe converts a CSV to ODS.
 
 ```python
-import codecs
 import csv
+from io import IOBase, TextIOWrapper
 from stream_write_ods import stream_write_ods
 
 # Any iterable that yields the bytes of a CSV file
 # Hard coded for the purposes of this example
-csv_bytes_iter = (
+bytes_iter = (
     b'col_1,col_2\n',
     b'1,"value"\n',
 )
 
+def to_str_lines(iterable, newline=None):
+    # Based on the answer at https://stackoverflow.com/a/70639580/1319998
+    chunk = b''
+    offset = 0
+    it = iter(iterable)
+
+    def up_to_iter(size):
+        nonlocal chunk, offset
+
+        while size:
+            if offset == len(chunk):
+                try:
+                    chunk = next(it)
+                except StopIteration:
+                    break
+                else:
+                    offset = 0
+            to_yield = min(size, len(chunk) - offset)
+            offset = offset + to_yield
+            size -= to_yield
+            yield chunk[offset - to_yield:offset]
+
+    class FileLikeObj(IOBase):
+        def readable(self):
+            return True
+        def read(self, size=-1):
+            return b''.join(up_to_iter(float('inf') if size is None or size < 0 else size))
+
+    yield from TextIOWrapper(FileLikeObj(), encoding='utf-8', newline=newline)
+
 def get_sheets(sheet_name, csv_reader):
     yield sheet_name, next(csv_reader), csv_reader
 
-csv_str_iter = codecs.iterdecode(csv_bytes_iter, 'utf-8')
-csv_reader = csv.reader(csv_str_iter, csv.QUOTE_NONNUMERIC)
+lines_iter = to_str_lines(bytes_iter, newline='')
+csv_reader = csv.reader(lines_iter, csv.QUOTE_NONNUMERIC)
 ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
 
