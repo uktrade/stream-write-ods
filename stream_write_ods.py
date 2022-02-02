@@ -14,7 +14,7 @@ def stream_write_ods(sheets, encoders=(
     (type(0.0), ('float', 'office:value', str)),
     (type(''), ('string', None, str)),
     (type(b''), ('string', None, lambda v: b64encode(v).decode())),
-    (type(None), ('string', None, lambda _: '#NA')),
+    (type(None), (None, None, lambda _: None)),
 ), get_modified_at=lambda: datetime.now(), chunk_size=65536):
     encoders = dict(encoders)
     modified_at = get_modified_at()
@@ -58,12 +58,15 @@ def stream_write_ods(sheets, encoders=(
                     for value in row:
                         value_type, value_attr, encoder = encoders[type(value)]
                         encoded = encoder(value)
-                        yield f'<table:table-cell'
-                        yield f' office:value-type="{value_type}"'
-                        if value_attr is not None:
-                            yield f' {value_attr}={quoteattr(encoded)}'
-                        yield f'><text:p>{escape(encoded)}</text:p>'
-                        yield '</table:table-cell>'
+                        yield '<table:table-cell'
+                        if value_type is None:
+                            yield '/>'
+                        else:
+                            yield f' office:value-type="{value_type}"'
+                            if value_attr is not None:
+                                yield f' {value_attr}={quoteattr(encoded)}'
+                            yield f'><text:p>{escape(encoded)}</text:p>'
+                            yield '</table:table-cell>'
                     yield '</table:table-row>'
                 yield '</table:table>'
             yield '</office:spreadsheet>'
