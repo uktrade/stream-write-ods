@@ -7,14 +7,14 @@ from stream_zip import ZIP_32, NO_COMPRESSION_32, stream_zip
 
 
 def stream_write_ods(sheets, encoders=(
-    (type(False), ('boolean', 'office:boolean-value', lambda v: str(v).lower())),
-    (type(date(1970, 1, 1)), ('date', 'office:date-value', lambda v: v.isoformat())),
-    (type(datetime(1970, 1, 1, 0, 0)), ('date', 'office:date-value', lambda v: v.isoformat())),
-    (type(0), ('float', 'office:value', str)),
-    (type(0.0), ('float', 'office:value', str)),
-    (type(''), ('string', None, str)),
-    (type(b''), ('string', None, lambda v: b64encode(v).decode())),
-    (type(None), (None, None, lambda _: None)),
+    (type(False), ('boolean', 'office:boolean-value', None, lambda v: str(v).lower())),
+    (type(date(1970, 1, 1)), ('date', 'office:date-value', 'date', lambda v: v.isoformat())),
+    (type(datetime(1970, 1, 1, 0, 0)), ('date', 'office:date-value', None, lambda v: v.isoformat())),
+    (type(0), ('float', 'office:value', None, str)),
+    (type(0.0), ('float', 'office:value', None, str)),
+    (type(''), ('string', None, None, str)),
+    (type(b''), ('string', None, None, lambda v: b64encode(v).decode())),
+    (type(None), (None, None, None, lambda _: None)),
 ), get_modified_at=lambda: datetime.now(), chunk_size=65536):
     encoders = dict(encoders)
     modified_at = get_modified_at()
@@ -34,9 +34,19 @@ def stream_write_ods(sheets, encoders=(
             b'</manifest:manifest>',
         )
 
-        # Not needed to validate, but Excel appears to need this file
         yield 'styles.xml', modified_at, perms, ZIP_32, (
-            b'<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.2"></office:document-styles>',
+            b'<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" office:version="1.2">'
+            b'<office:styles>'
+            b'<number:date-style style:name="data-date">'
+            b'<number:year number:style="long"/>'
+            b'<number:text>-</number:text>'
+            b'<number:month number:style="long"/>'
+            b'<number:text>-</number:text>'
+            b'<number:day number:style="long"/>'
+            b'</number:date-style>'
+            b'<style:style style:name="date" style:family="table-cell" style:data-style-name="data-date"/>'
+            b'</office:styles>'
+            b'</office:document-styles>',
         )
 
         def content_xml():
@@ -56,7 +66,7 @@ def stream_write_ods(sheets, encoders=(
                 for row in rows:
                     yield '<table:table-row>'
                     for value in row:
-                        value_type, value_attr, encoder = encoders[type(value)]
+                        value_type, value_attr, style_name, encoder = encoders[type(value)]
                         encoded = encoder(value)
                         yield '<table:table-cell'
                         if value_type is None:
@@ -65,6 +75,8 @@ def stream_write_ods(sheets, encoders=(
                             yield f' office:value-type="{value_type}"'
                             if value_attr is not None:
                                 yield f' {value_attr}={quoteattr(encoded)}'
+                            if style_name is not None:
+                                yield f' table:style-name={quoteattr(style_name)}'
                             yield f'><text:p>{escape(encoded)}</text:p>'
                             yield '</table:table-cell>'
                     yield '</table:table-row>'
