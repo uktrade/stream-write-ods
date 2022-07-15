@@ -16,7 +16,7 @@ ezodf==0.3.2
     # via pandas-ods-reader
 iniconfig==1.1.1
     # via pytest
-lxml==4.7.1
+lxml==4.9.1
     # via pandas-ods-reader
 numpy==1.22.0
     # via pandas
