@@ -12,6 +12,8 @@ coverage[toml]==6.2
     # via
     #   -r requirements-dev.in
     #   pytest-cov
+exceptiongroup==1.0.0
+    # via pytest
 ezodf==0.3.2
     # via pandas-ods-reader
 iniconfig==1.1.1
@@ -28,11 +30,9 @@ pandas-ods-reader==0.1.4
     # via -r requirements-dev.in
 pluggy==1.0.0
     # via pytest
-py==1.11.0
-    # via pytest
 pyparsing==3.0.6
     # via packaging
-pytest==6.2.5
+pytest==7.2.0
     # via
     #   -r requirements-dev.in
     #   pytest-cov
@@ -45,8 +45,8 @@ pytz==2021.3
 six==1.16.0
     # via python-dateutil
 stream-zip==0.0.30
-    # via sanitized-package
-toml==0.10.2
-    # via pytest
+    # via stream-write-ods
 tomli==2.0.0
-    # via coverage
+    # via
+    #   coverage
+    #   pytest
