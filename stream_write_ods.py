@@ -87,4 +87,4 @@ def stream_write_ods(sheets, encoders=(
 
         yield 'content.xml', modified_at, perms, ZIP_32, iterencode(content_xml(), 'utf-8')
 
-    yield from stream_zip(files(), chunk_size=chunk_size)
+    yield from stream_zip(files(), chunk_size=chunk_size, extended_timestamps=False)
