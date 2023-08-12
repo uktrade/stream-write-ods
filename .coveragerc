@@ -1,5 +1,2 @@
 [run]
-parallel = True
 branch = True
-source = .
-omit = setup.py

@@ -1,4 +1,6 @@
-# stream-write-ods [![CircleCI](https://circleci.com/gh/uktrade/stream-write-ods.svg?style=shield)](https://circleci.com/gh/uktrade/stream-write-ods) [![Test Coverage](https://api.codeclimate.com/v1/badges/1a894f9bd9860544b409/test_coverage)](https://codeclimate.com/github/uktrade/stream-write-ods/test_coverage)
+# stream-write-ods
+
+[![PyPI package](https://img.shields.io/pypi/v/stream-write-ods?label=PyPI%20package&color=%234c1)](https://pypi.org/project/stream-write-ods/) [![Test suite](https://img.shields.io/github/actions/workflow/status/uktrade/stream-write-ods/test.yml?label=Test%20suite)](https://github.com/uktrade/stream-write-ods/actions/workflows/test.yml) [![Code coverage](https://img.shields.io/codecov/c/github/uktrade/stream-write-ods?label=Code%20coverage)](https://app.codecov.io/gh/uktrade/stream-write-ods)
 
 Python function to construct an ODS (OpenDocument Spreadsheet) on the fly - without having to store the entire file in memory or disk.
 
