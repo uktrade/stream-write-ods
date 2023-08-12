@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Python function to construct an ODS spreadsheet on the fly - without having to store the entire file in memory or disk"
 readme = "README.md"
-requires-python = ">=3.7.4"
+requires-python = ">=3.7.1"
 classifiers = [
     'Programming Language :: Python :: 3',
     'License :: OSI Approved :: MIT License',
