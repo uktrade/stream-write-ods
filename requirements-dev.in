@@ -1,5 +1,0 @@
--e file:.#egg=stream_write_ods
-coverage
-pytest
-pytest-cov
-pandas-ods-reader
