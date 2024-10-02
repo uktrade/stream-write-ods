@@ -3,7 +3,7 @@ from codecs import iterencode
 from datetime import datetime, date
 from xml.sax.saxutils import escape, quoteattr
 
-from stream_zip import ZIP_32, NO_COMPRESSION_32, stream_zip
+from stream_zip import ZIP_32, ZIP_64, NO_COMPRESSION_32, stream_zip
 
 
 def stream_write_ods(sheets, encoders=(
@@ -15,7 +15,7 @@ def stream_write_ods(sheets, encoders=(
     (type(''), ('string', None, None, str)),
     (type(b''), ('string', None, None, lambda v: b64encode(v).decode())),
     (type(None), (None, None, None, lambda _: None)),
-), get_modified_at=lambda: datetime.now(), chunk_size=65536):
+), get_modified_at=lambda: datetime.now(), chunk_size=65536, use_zip_64=False):
     encoders = dict(encoders)
     modified_at = get_modified_at()
     perms = 0o600
@@ -85,6 +85,9 @@ def stream_write_ods(sheets, encoders=(
             yield '</office:body>'
             yield '</office:document-content>'
 
-        yield 'content.xml', modified_at, perms, ZIP_32, iterencode(content_xml(), 'utf-8')
+        method = ZIP_32
+        if use_zip_64:
+            method = ZIP_64
+        yield 'content.xml', modified_at, perms, method, iterencode(content_xml(), 'utf-8')
 
     yield from stream_zip(files(), chunk_size=chunk_size, extended_timestamps=False)
