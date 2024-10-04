@@ -39,7 +39,7 @@ ods_chunks = stream_write_ods(get_sheets())
 
 ## Usage: Convert CSV file to ODS
 
-The following recipe converats a local CSV file to ODS
+The following recipe converts a local CSV file to ODS
 
 ```python
 import csv
@@ -52,7 +52,6 @@ with open('my.csv', 'r', encoding='utf-8', newline='') as f:
     csv_reader = csv.reader(f, csv.QUOTE_NONNUMERIC)
     ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
-
 
 
 ## Usage: Convert CSV bytes to ODS
@@ -281,6 +280,8 @@ ODS files are ZIP files, and as such _require_ a "modified at" time for each mem
 This is useful if you want to make sure generated ODS files are byte-for-byte identical to a fixed reference, say from automated tests.
 
 
-## Limitations
+## Large ODS files
 
-ODS spreadsheets are essentially ZIP archives containing several member files. While in general ZIP archives can be up to 16EiB (exbibyte) in size using [Zip64](https://en.wikipedia.org/wiki/ZIP_(file_format)#ZIP64), [LibreOffice does not support Zip64](https://bugs.documentfoundation.org/show_bug.cgi?id=128244), and so ODS files are de-facto limited to 4GiB (gibibyte). The same limit applies to the compressed size of each member file, the uncompressed size of each member file, and (approximately) to the size of the entire compressed archive.
+ODS spreadsheets are essentially ZIP archives containing several member files. By default, stream-write-ods creates ZIP files that are limited to 4GiB (gibibyte) of data for compatibility reasons, for example to support older versions of LibreOffice. If you attempt to store more than this limit a ZipOverflow exception will be raised.
+ 
+To avoid this exception and to store more data, you can pass `use_zip_64=True` as an argument to stream-write-ods. This results in a more recent ZIP format used that allows 16 EiB (exbibyte) of data to be stored, but with the downside that older versions of LibreOffice will not be able to open the resulting ODS file.
