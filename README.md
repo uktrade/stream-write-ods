@@ -219,7 +219,7 @@ It is possible to change how each type is encoded by overriding the `encoders` p
 
 ## Modified at
 
-ODS files are ZIP files, and as such _require_ a "modified at" time for each member file. This defaults to `datatime.now`, but can be overridden by the `get_modified_at` parameter of the `stream_write_ods` function. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
+ODS files are ZIP files, and as such _require_ a "modified at" time for each member file. This defaults to `datetime.now()`, but can be overridden by the `get_modified_at` parameter of the `stream_write_ods` function. See [stream-write-ods.py](https://github.com/uktrade/stream-write-ods/blob/main/stream_write_ods.py) for the default implementation.
 
 This is useful if you want to make sure generated ODS files are byte-for-byte identical to a fixed reference, say from automated tests.
 
