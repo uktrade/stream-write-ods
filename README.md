@@ -56,11 +56,12 @@ with open('my.csv', 'r', encoding='utf-8', newline='') as f:
 
 ## Usage: Convert CSV bytes to ODS
 
-The following recipe converts an iterable yielding the bytes of a CSV to ODS.
+Using [to-file-like-obj](https://github.com/uktrade/to-file-like-obj), the following recipe converts an iterable yielding the bytes of a CSV to ODS.
 
 ```python
 import csv
 from io import IOBase, TextIOWrapper
+from to_file_like_obj import to_file_like_obj
 from stream_write_ods import stream_write_ods
 
 # Any iterable that yields the bytes of a CSV file
@@ -70,40 +71,10 @@ bytes_iter = (
     b'1,"value"\n',
 )
 
-def to_str_lines(iterable):
-    # Based on the answer at https://stackoverflow.com/a/70639580/1319998
-    chunk = b''
-    offset = 0
-    it = iter(iterable)
-
-    def up_to_iter(size):
-        nonlocal chunk, offset
-
-        while size:
-            if offset == len(chunk):
-                try:
-                    chunk = next(it)
-                except StopIteration:
-                    break
-                else:
-                    offset = 0
-            to_yield = min(size, len(chunk) - offset)
-            offset = offset + to_yield
-            size -= to_yield
-            yield chunk[offset - to_yield:offset]
-
-    class FileLikeObj(IOBase):
-        def readable(self):
-            return True
-        def read(self, size=-1):
-            return b''.join(up_to_iter(float('inf') if size is None or size < 0 else size))
-
-    yield from TextIOWrapper(FileLikeObj(), encoding='utf-8', newline='')
-
 def get_sheets(sheet_name, csv_reader):
     yield sheet_name, next(csv_reader), csv_reader
 
-lines_iter = to_str_lines(bytes_iter)
+lines_iter = TextIOWrapper(to_file_like_obj(bytes_iter), , encoding='utf-8', newline='')
 csv_reader = csv.reader(lines_iter, csv.QUOTE_NONNUMERIC)
 ods_chunks = stream_write_ods(get_sheets('Sheet 1', csv_reader))
 ```
@@ -150,11 +121,12 @@ with pd.read_csv(csv_file, chunksize=1024) as reader:
 
 ## Usage: Convert JSON to ODS
 
-Using [ijson](https://github.com/ICRAR/ijson) to stream-parse a JSON file, it's possible to convert JSON data to ODS on the fly:
+Using [ijson](https://github.com/ICRAR/ijson) to stream-parse a JSON file and [to-file-like-obj](https://github.com/uktrade/to-file-like-obj) to convert an iterable of bytes to a file-like object, it's possible to convert JSON data to ODS on the fly.
 
 ```python
 import ijson
 import itertools
+from to_file_like_obj import to_file_like_obj
 from stream_write_ods import stream_write_ods
 
 # Any iterable that yields the bytes of a JSON file
@@ -165,34 +137,6 @@ json_bytes_iter = (b'''{
       {"id": 2, "name": "Bar"}
   ]
 }''',)
-
-# ijson requires a file-like object
-def to_file_like_obj(bytes_iter):
-    chunk = b''
-    offset = 0
-    it = iter(bytes_iter)
-
-    def up_to_iter(size):
-        nonlocal chunk, offset
-
-        while size:
-            if offset == len(chunk):
-                try:
-                    chunk = next(it)
-                except StopIteration:
-                    break
-                else:
-                    offset = 0
-            to_yield = min(size, len(chunk) - offset)
-            offset = offset + to_yield
-            size -= to_yield
-            yield chunk[offset - to_yield:offset]
-
-    class FileLikeObj:
-        def read(self, size=-1):
-            return b''.join(up_to_iter(float('inf') if size is None or size < 0 else size))
-
-    return FileLikeObj()
 
 def get_sheets(json_file):
     columns = None
@@ -210,7 +154,7 @@ def get_sheets(json_file):
 
     yield 'Sheet 1', columns, itertools.chain((first_row,), rows_it)
 
-json_file = to_file_like_obj(json_bytes_iter)
+json_file = to_file_like_obj(json_bytes_iter)  # ijson requires a file-like object
 ods_chunks = stream_write_ods(get_sheets(json_file))
 ```
 
